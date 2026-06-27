@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기도 빈그릇</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <button class="icon-button" id="addTopicButton" type="button" aria-label="기도제목 추가" title="기도제목 추가">
+          <span aria-hidden="true">+</span>
+        </button>
+      </header>
+
+      <section class="topic-stage" aria-label="기도제목">
+        <button class="nav-button" id="prevButton" type="button" aria-label="이전 기도제목" title="이전">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+
+        <div class="topic-column">
+          <article class="topic-card" id="topicCard" tabindex="0" aria-label="선택한 기도제목 기록하기">
+            <button class="edit-topic-button" id="editTopicButton" type="button" aria-label="기도제목 수정" title="수정">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
+            </button>
+            <p class="topic-count" id="topicCount"></p>
+            <h2 id="topicTitle"></h2>
+            <p id="topicDescription"></p>
+          </article>
+
+          <section class="journal-panel" id="journalPanel" aria-label="기도 기록">
+            <div class="entries" id="entriesList" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <button class="nav-button" id="nextButton" type="button" aria-label="다음 기도제목" title="다음">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
+      </section>
+
+    </main>
+
+    <dialog id="entryDialog">
+      <form method="dialog" id="entryForm" class="entry-form">
+        <div class="panel-header">
+          <h2 id="entryDialogTitle">기도 기록</h2>
+          <button class="icon-button subtle" value="cancel" type="submit" aria-label="닫기" title="닫기">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <label>
+          날짜
+          <input id="entryDate" name="entryDate" type="date" required />
+        </label>
+        <label>
+          기록한 내용
+          <textarea id="entryBody" name="entryBody" rows="8" placeholder="기도하며 받은 마음을 적어보세요."></textarea>
+        </label>
+        <div class="dialog-actions">
+          <button class="danger-button" id="deleteEntryButton" type="button">삭제</button>
+          <button class="primary-button" value="save" type="submit">기록 저장</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="topicDialog">
+      <form method="dialog" id="topicForm" class="topic-form">
+        <div class="panel-header">
+          <div>
+            <p class="kicker" id="dialogMode">New Topic</p>
+            <h2>기도제목</h2>
+          </div>
+          <button class="icon-button subtle" value="cancel" type="submit" aria-label="닫기" title="닫기">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <label>
+          제목
+          <input id="topicInput" name="topicInput" maxlength="60" required placeholder="기도제목을 적어주세요" />
+        </label>
+        <label>
+          짧은 설명
+          <textarea id="descriptionInput" name="descriptionInput" rows="4" maxlength="160" placeholder="어떤 마음으로 기도할지 짧게 남겨보세요."></textarea>
+        </label>
+        <menu>
+          <button class="danger-button" id="deleteTopicButton" type="button">삭제</button>
+          <span class="menu-spacer"></span>
+          <button value="cancel" type="submit">취소</button>
+          <button class="primary-button" id="saveTopicButton" value="default" type="submit">저장</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
