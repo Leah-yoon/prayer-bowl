@@ -1,8 +1,34 @@
 const STORAGE_KEY = "empty-bowl-prayer-state";
+const FONT_STORAGE_KEY = "empty-bowl-font-preview-index";
 const SHEET_API_URL =
   "https://script.google.com/macros/s/AKfycbyxW8hs4u4cBYFZ5YgaeOvHmGIkPFPODYKCHY24fgCKjaDr0pkCOP8L9eYHsHEJJaS4/exec";
+const FONT_PREVIEW_MODE = false;
+
+const FONT_OPTIONS = [
+  { name: "Gowun Batang", family: '"Gowun Batang"' },
+  { name: "Gowun Dodum", family: '"Gowun Dodum"' },
+  { name: "Noto Serif KR", family: '"Noto Serif KR"' },
+  { name: "Noto Sans KR", family: '"Noto Sans KR"' },
+  { name: "Nanum Myeongjo", family: '"Nanum Myeongjo"' },
+  { name: "Nanum Gothic", family: '"Nanum Gothic"' },
+  { name: "Hahmlet", family: '"Hahmlet"' },
+  { name: "Song Myung", family: '"Song Myung"' },
+  { name: "Do Hyeon", family: '"Do Hyeon"' },
+  { name: "Jua", family: '"Jua"' },
+  { name: "Gugi", family: '"Gugi"' },
+  { name: "Poor Story", family: '"Poor Story"' },
+  { name: "Gaegu", family: '"Gaegu"' },
+  { name: "Hi Melody", family: '"Hi Melody"' },
+  { name: "Single Day", family: '"Single Day"' },
+  { name: "Yeon Sung", family: '"Yeon Sung"' },
+  { name: "East Sea Dokdo", family: '"East Sea Dokdo"' },
+  { name: "Nanum Pen Script", family: '"Nanum Pen Script"' },
+  { name: "Nanum Brush Script", family: '"Nanum Brush Script"' },
+  { name: "Black Han Sans", family: '"Black Han Sans"' },
+];
 
 const today = getLocalDate();
+let activeFontIndex = 1;
 
 const defaultState = {
   activeIndex: 0,
@@ -61,6 +87,12 @@ elements.entryDate.value = today;
 
 elements.prevButton.addEventListener("click", () => moveTopic(-1));
 elements.nextButton.addEventListener("click", () => moveTopic(1));
+document.querySelector(".card-toolbar").addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+document.querySelector(".side-controls").addEventListener("click", (event) => {
+  event.stopPropagation();
+});
 elements.topicCard.addEventListener("click", () => {
   if (wasSwiping) {
     wasSwiping = false;
@@ -217,8 +249,19 @@ function getActiveTopic() {
 }
 
 function moveTopic(direction) {
+  if (FONT_PREVIEW_MODE) {
+    moveFont(direction);
+    return;
+  }
+
   state.activeIndex = (state.activeIndex + direction + state.topics.length) % state.topics.length;
   persist({ cloud: false });
+  render();
+}
+
+function moveFont(direction) {
+  activeFontIndex = (activeFontIndex + direction + FONT_OPTIONS.length) % FONT_OPTIONS.length;
+  localStorage.setItem(FONT_STORAGE_KEY, String(activeFontIndex));
   render();
 }
 
@@ -380,8 +423,12 @@ function deleteEntry(entryId) {
 
 function render() {
   const topic = getActiveTopic();
+  const font = FONT_OPTIONS[activeFontIndex];
 
-  elements.topicCount.textContent = `${state.activeIndex + 1} / ${state.topics.length}`;
+  document.documentElement.style.setProperty("--app-font", font.family);
+  elements.topicCount.textContent = FONT_PREVIEW_MODE
+    ? `${activeFontIndex + 1} / ${FONT_OPTIONS.length} · ${font.name}`
+    : `${state.activeIndex + 1} / ${state.topics.length}`;
   elements.topicTitle.textContent = topic.title;
   elements.topicDescription.textContent = topic.description || "기도하며 기록할 내용을 남겨보세요.";
   renderEntries(topic);
@@ -449,4 +496,12 @@ function getLocalDate() {
   const date = new Date();
   const offset = date.getTimezoneOffset() * 60000;
   return new Date(date.getTime() - offset).toISOString().slice(0, 10);
+}
+
+function loadFontIndex() {
+  const saved = Number(localStorage.getItem(FONT_STORAGE_KEY));
+  if (Number.isInteger(saved) && saved >= 0 && saved < FONT_OPTIONS.length) {
+    return saved;
+  }
+  return 0;
 }
