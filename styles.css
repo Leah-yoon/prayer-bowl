@@ -25,6 +25,7 @@
 body {
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   background:
     linear-gradient(120deg, rgba(61, 111, 102, 0.12), transparent 34%),
     linear-gradient(260deg, rgba(154, 89, 89, 0.1), transparent 38%),
@@ -44,9 +45,10 @@ button {
 
 .app-shell {
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 12px;
+  padding: 0;
 }
 
 .panel-header {
@@ -117,31 +119,32 @@ h1 {
 }
 
 .topic-stage {
-  min-height: calc(100vh - 24px);
+  width: 100vw;
+  max-width: 100vw;
+  min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
 }
 
 .topic-column {
+  width: 100%;
   min-width: 0;
 }
 
 .topic-card {
   position: relative;
-  min-height: calc(100svh - 24px);
+  width: 100vw;
+  max-width: 100vw;
+  min-width: 0;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   text-align: center;
-  padding: clamp(32px, 8vw, 92px) clamp(70px, 11vw, 132px);
-  border: 1px solid rgba(222, 215, 204, 0.9);
-  border-radius: 8px 8px 0 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 253, 248, 0.96)),
-    var(--paper);
-  box-shadow: var(--shadow);
+  padding: clamp(72px, 12vh, 124px) clamp(72px, 12vw, 180px);
+  overflow-x: hidden;
   outline: none;
-  transition: box-shadow 180ms ease;
 }
 
 .card-toolbar {
@@ -197,12 +200,8 @@ h1 {
   stroke-width: 1.7;
 }
 
-.topic-card:hover,
-.topic-card:focus-visible {
-  box-shadow: 0 28px 80px rgba(44, 39, 31, 0.18);
-}
-
 .topic-count {
+  width: 100%;
   margin-bottom: 20px;
   color: var(--muted);
   font-weight: 700;
@@ -210,31 +209,35 @@ h1 {
 }
 
 .topic-card h2 {
-  max-width: 920px;
+  width: min(100%, 980px);
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 18px;
-  font-size: clamp(2.7rem, 9vw, 6.2rem);
+  font-size: clamp(2.8rem, 7vw, 6.6rem);
   line-height: 1.08;
   text-align: center;
   overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .topic-card > p:not(.topic-count) {
-  max-width: 620px;
+  width: min(100%, 680px);
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 34px;
   color: var(--muted);
   font-size: clamp(1rem, 2.4vw, 1.2rem);
   line-height: 1.65;
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .journal-panel {
   margin-top: 0;
-  padding: clamp(22px, 4vw, 36px);
-  border: 1px solid var(--line);
-  border-top: 0;
-  border-radius: 0 0 8px 8px;
-  background: rgba(255, 253, 248, 0.9);
-  box-shadow: 0 18px 50px rgba(44, 39, 31, 0.08);
+  padding: clamp(24px, 5vw, 56px);
+  background: transparent;
 }
 
 .entry-form,
@@ -443,7 +446,7 @@ dialog::backdrop {
 
 @media (max-width: 680px) {
   .app-shell {
-    padding: 10px;
+    padding: 0;
   }
 
   .icon-button {
@@ -458,14 +461,31 @@ dialog::backdrop {
   }
 
   .topic-card {
-    min-height: calc(100svh - 20px);
-    padding: 28px 54px;
+    min-height: 100svh;
+    padding: 72px 42px;
+  }
+
+  .topic-card h2 {
+    width: min(270px, calc(100vw - 118px));
+    font-size: clamp(1.9rem, 8.4vw, 2.25rem);
+    line-height: 1.14;
+    word-break: keep-all;
+  }
+
+  .topic-card > p:not(.topic-count) {
+    width: min(280px, calc(100vw - 104px));
+    font-size: 0.98rem;
+    word-break: keep-all;
   }
 
   .card-toolbar {
     top: 12px;
     left: 12px;
     right: 12px;
+  }
+
+  .topic-actions {
+    gap: 6px;
   }
 
   .side-button {
